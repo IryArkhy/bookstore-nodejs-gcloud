@@ -1,8 +1,8 @@
 steps:
-  - name: 'node:16.5.0'
+  - name: 'gcr.io/cloud-builders/npm'
     id: Install all dependencies
     args: ['npm', 'install']
-  - name: 'node:16.5.0'
+  - name: 'gcr.io/cloud-builders/npm'
     id: Build the app
 
     args: ['npm', 'run', 'build']
