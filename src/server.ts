@@ -22,7 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get('/', (_, res) => {
   res.status(200);
-  res.json({ message: 'The bookstore api is up and running' });
+  res.json({ message: 'The bookstore api is up and running', });
 });
 
 app.use('/api', protectMiddleware, router);
