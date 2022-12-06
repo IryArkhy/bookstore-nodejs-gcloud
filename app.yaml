@@ -5,14 +5,3 @@ env_variables:
   DB_USER: bookstore_1ea5_user
   DB_PASS: dNOimKgRMZclZUh7yrfpuPHDmHnjcVCG
   DB_NAME: bookstore
-handlers:
-  - url: /.*
-    script: auto
-    secure: always
-  - url: .*
-    script: auto
-automatic_scaling:
-  min_idle_instances: automatic
-  max_idle_instances: automatic
-  min_pending_latency: automatic
-  max_pending_latency: automatic
