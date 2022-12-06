@@ -1,7 +1,2 @@
 runtime: nodejs16
 env: standard
-env_variables:
-  INSTANCE_UNIX_SOCKET: /cloudsql/bookstore-api-370618:europe-central2:bookstore-db
-  DB_USER: bookstore_1ea5_user
-  DB_PASS: dNOimKgRMZclZUh7yrfpuPHDmHnjcVCG
-  DB_NAME: bookstore
