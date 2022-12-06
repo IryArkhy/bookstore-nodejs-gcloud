@@ -1,5 +1,10 @@
 runtime: nodejs16
 env: standard
+env_variables:
+  INSTANCE_UNIX_SOCKET: /cloudsql/bookstore-api-370618:europe-central2:bookstore-db
+  DB_USER: bookstore_1ea5_user
+  DB_PASS: dNOimKgRMZclZUh7yrfpuPHDmHnjcVCG
+  DB_NAME: bookstore
 handlers:
   - url: /.*
     script: auto
@@ -11,5 +16,3 @@ automatic_scaling:
   max_idle_instances: automatic
   min_pending_latency: automatic
   max_pending_latency: automatic
-beta_settings:
-  cloud_sql_instances: bookstore-api-370618:europe-central2:bookstore-db
