@@ -1,0 +1,10 @@
+node_modules/
+src/
+tsconfig.json
+.gitignore
+.nvmrc
+.prettierrc
+README.md
+jest.config.json
+LICENSE
+.env
