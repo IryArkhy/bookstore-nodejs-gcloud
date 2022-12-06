@@ -10,11 +10,7 @@ steps:
     env:
       - 'DATABASE_URL=${_DATABASE_URL}'
       - 'JWT_SECRET=${_JWT_SECRET}'
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'bash'
-    args:
-      [
-        '-c',
-        'gcloud config set app/cloud_build_timeout 1600 && gcloud app deploy',
-      ]
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Deploy the app
+    args: ['app', 'deploy']
 timeout: '1600s'
