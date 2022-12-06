@@ -1,11 +1,11 @@
 steps:
   - name: 'node:16.5.0'
     id: Install all dependencies
-    args: ['npm', install']
+    args: ['npm', 'install']
   - name: 'node:16.5.0'
     id: Build the app
 
-    args: [npm, 'run', 'build']
+    args: ['npm', 'run', 'build']
     env:
       - 'DATABASE_URL=${_DATABASE_URL}'
       - 'JWT_SECRET=${_JWT_SECRET}'
