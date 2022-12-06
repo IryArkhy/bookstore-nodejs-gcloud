@@ -1,11 +1,11 @@
 steps:
   - name: 'gcr.io/cloud-builders/npm'
     id: Install all dependencies
-    args: ['npm', 'install']
+    args: ['install']
   - name: 'gcr.io/cloud-builders/npm'
     id: Build the app
 
-    args: ['npm', 'run', 'build']
+    args: ['run', 'build']
     env:
       - 'DATABASE_URL=${_DATABASE_URL}'
       - 'JWT_SECRET=${_JWT_SECRET}'
