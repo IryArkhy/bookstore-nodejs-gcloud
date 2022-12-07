@@ -16,7 +16,18 @@ if (stage === 'production') {
   envConfig = require('./local').default;
 }
 
-const defaultConfig = {
+type Config = {
+  stage: string;
+  env: string;
+  port: number;
+  morganMode: 'dev' | 'tiny';
+  secrets: {
+    jwt: string;
+    dbUrl: string;
+  };
+};
+
+const defaultConfig: Config = {
   stage,
   env: process.env.NODE_ENV,
   port: 8080,

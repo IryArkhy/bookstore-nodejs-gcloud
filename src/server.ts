@@ -3,13 +3,13 @@ import morgan from 'morgan';
 import cors from 'cors';
 
 import config from './config';
-// import router from './router';
-// import { protectMiddleware } from './modules/auth';
-// import { userHandlers, userValidators } from './handlers/users';
+import router from './router';
+import { protectMiddleware } from './modules/auth';
+import { userHandlers, userValidators } from './handlers/users';
 import {
   catchError,
   errorLogger,
-  // handleInputErrors,
+  handleInputErrors,
   invalidPathHandler,
 } from './modules/middleware';
 
@@ -30,19 +30,19 @@ app.get('/', (req: Request, res, next) => {
   }
 });
 
-// app.use('/api', protectMiddleware, router);
-// app.post(
-//   '/user',
-//   userValidators.createUser,
-//   handleInputErrors,
-//   userHandlers.createNewUser,
-// );
-// app.post(
-//   '/signin',
-//   userValidators.signIn,
-//   handleInputErrors,
-//   userHandlers.signIn,
-// );
+app.use('/api', protectMiddleware, router);
+app.post(
+  '/user',
+  userValidators.createUser,
+  handleInputErrors,
+  userHandlers.createNewUser,
+);
+app.post(
+  '/signin',
+  userValidators.signIn,
+  handleInputErrors,
+  userHandlers.signIn,
+);
 
 app.use(invalidPathHandler);
 app.use(errorLogger);
