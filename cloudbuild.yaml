@@ -10,7 +10,7 @@ steps:
     env:
       - 'DATABASE_URL=${_DATABASE_URL}'
       - 'JWT_SECRET=${_JWT_SECRET}'
-        - 'STAGE=${_STAGE}'
+      - 'STAGE=${_STAGE}'
   - name: 'gcr.io/cloud-builders/gcloud'
     id: Deploy the app
     args: ['app', 'deploy']
