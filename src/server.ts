@@ -16,7 +16,7 @@ import {
 const app = express();
 
 app.use(cors());
-app.use(morgan(config.morganMode));
+// app.use(morgan(config.morganMode));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
