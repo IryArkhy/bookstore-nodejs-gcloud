@@ -5,7 +5,7 @@ instance_class: F2
 env_variables:
   DATABASE_URL: '%DATABASE_URL%'
   JWT_SECRET: '%JWT_SECRET%'
-  STAGE: '%_STAGE%'
+  STAGE: '%STAGE%'
 
 automatic_scaling:
   min_idle_instances: 1
