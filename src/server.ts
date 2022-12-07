@@ -20,7 +20,7 @@ app.use(morgan(config.morganMode));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (req: Request, res) => {
+app.get('/', (req: Request, res, next) => {
   console.log({ req: req.url });
   res.status(200);
   res.json({ message: 'The bookstore api is up and running' });
