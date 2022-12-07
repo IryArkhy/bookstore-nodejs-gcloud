@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request } from 'express';
 import morgan from 'morgan';
 import cors from 'cors';
 
@@ -20,9 +20,10 @@ app.use(morgan(config.morganMode));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', (_, res) => {
+app.get('/', (req: Request, res) => {
+  console.log({ req: req.url });
   res.status(200);
-  res.json({ message: 'The bookstore api is up and running', });
+  res.json({ message: 'The bookstore api is up and running' });
 });
 
 app.use('/api', protectMiddleware, router);
