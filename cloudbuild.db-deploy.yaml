@@ -1,0 +1,25 @@
+steps:
+  - name: 'node:16.5.0'
+    id: Install all dependencies
+    entrypoint: npm
+    args: ['install']
+  - name: 'ubuntu'
+    args: ['bash', './cloud_env.sh']
+    env:
+      - 'DATABASE_URL=${_DATABASE_URL}'
+      - 'JWT_SECRET=${_JWT_SECRET}'
+      - 'STAGE=${_STAGE}'
+  - name: 'node:16.5.0'
+    id: Build the app
+    entrypoint: npm
+    args: ['run', 'build']
+  - name: 'gcr.io/cloud-builders/npm'
+    entrypoint: npx
+    args: ['prisma', 'migrate', 'deploy']
+  - name: 'gcr.io/cloud-builders/npm'
+    entrypoint: npx
+    args: ['prisma', 'seed']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Deploy the app
+    args: ['app', 'deploy']
+timeout: '1600s'

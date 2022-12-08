@@ -23,6 +23,7 @@ export const createNewUser = async (
     const userData: CreateUserRequestBody = {
       username: body.username,
       email: body.email,
+      role: body.role,
       password: await hashPassword(body.password),
     };
 
