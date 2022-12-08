@@ -14,6 +14,9 @@ steps:
     id: Build the app
     entrypoint: npm
     args: ['run', 'build']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Deploy the app
+    args: ['app', 'deploy']
   - name: 'gcr.io/cloud-builders/npm'
     id: Run migration
     entrypoint: npx
@@ -26,7 +29,4 @@ steps:
     env:
       - DATABASE_URL=$_DATABASE_URL
     args: ['prisma', 'seed']
-  - name: 'gcr.io/cloud-builders/gcloud'
-    id: Deploy the app
-    args: ['app', 'deploy']
 timeout: '1600s'
