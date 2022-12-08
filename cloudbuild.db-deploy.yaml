@@ -4,6 +4,7 @@ steps:
     entrypoint: npm
     args: ['install']
   - name: 'ubuntu'
+    id: Add environment variables
     args: ['bash', './cloud_env.sh']
     env:
       - 'DATABASE_URL=${_DATABASE_URL}'
@@ -14,10 +15,16 @@ steps:
     entrypoint: npm
     args: ['run', 'build']
   - name: 'gcr.io/cloud-builders/npm'
+    id: Run migration
     entrypoint: npx
+    env:
+      - DATABASE_URL=$_DATABASE_URL_BUILD
     args: ['prisma', 'migrate', 'deploy']
   - name: 'gcr.io/cloud-builders/npm'
+    id: Seed db
     entrypoint: npx
+    env:
+      - DATABASE_URL=$_DATABASE_URL
     args: ['prisma', 'seed']
   - name: 'gcr.io/cloud-builders/gcloud'
     id: Deploy the app
