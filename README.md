@@ -1,3 +1,5 @@
-# bookstore-nodejs
+# Learning Project: Bookstore API
 
-## Book store api
+**Class: Technology research, analysis, and management of software development lifecycle.**
+
+--- National Aviation University ---
