@@ -26,3 +26,7 @@ export type UpdateBookReqBody = {
 export type DeleteBookReqBody = {
   authorID: string;
 };
+
+export type CreateCommentReqBody = {
+  comment: string;
+};

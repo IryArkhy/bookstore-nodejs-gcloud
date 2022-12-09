@@ -3,10 +3,13 @@ import { NextFunction, Request, Response } from 'express';
 
 import { prisma } from '../../db';
 import { RequestWithUser } from '../../modules/auth';
+import { bufferToDataURI } from '../../modules/file';
+import { uploadToCloudinary } from '../../modules/images';
 import { CustomError, PrismaClientErrorCodes } from '../../types';
 
 import {
   CreateBookReqBody,
+  CreateCommentReqBody,
   DeleteBookReqBody,
   GetBooksReqQuery,
   UpdateBookReqBody,
@@ -338,5 +341,116 @@ export const deleteBook = async (
     }
 
     next(err);
+  }
+};
+
+export const uploadBookImage = async (
+  req: Request<{ id: string; authorID: string }>,
+  response: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { file, params } = req;
+
+    const book = await prisma.book.findUniqueOrThrow({
+      where: {
+        id_authorID: {
+          id: params.id,
+          authorID: params.authorID,
+        },
+      },
+      include: {
+        bookAssest: true,
+      },
+    });
+
+    if (!file) {
+      return response.status(400).json({
+        message: 'Image is required',
+      });
+    }
+
+    const fileFormat = file.mimetype.split('/')[1];
+    const { base64 } = bufferToDataURI(fileFormat, file.buffer);
+
+    const imageDetails = await uploadToCloudinary(
+      base64,
+      fileFormat,
+      `${params.id}-${params.authorID}`,
+      book.asset && book.bookAssest.publicID
+        ? book.bookAssest.publicID
+        : undefined,
+    );
+
+    const bookAsset = {
+      assetID: imageDetails.asset_id,
+      publicID: imageDetails.public_id,
+      width: imageDetails.width,
+      height: imageDetails.height,
+      url: imageDetails.url,
+      secureUrl: imageDetails.secure_url,
+    };
+
+    await prisma.book.update({
+      where: {
+        id_authorID: {
+          id: params.id,
+          authorID: params.authorID,
+        },
+      },
+
+      data: {
+        asset: imageDetails.secure_url,
+        bookAssest: {
+          upsert: {
+            create: bookAsset,
+            update: bookAsset,
+          },
+        },
+      },
+    });
+
+    response.status(200).json({ imageDetails });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createBookComment = async (
+  req: RequestWithUser<
+    { id: string; authorID: string },
+    any,
+    CreateCommentReqBody
+  >,
+  response: Response,
+  next: NextFunction,
+) => {
+  const { id, authorID } = req.params;
+  try {
+    const book = await prisma.book.update({
+      where: {
+        id_authorID: {
+          id,
+          authorID,
+        },
+      },
+      data: {
+        bookComments: {
+          create: {
+            userID: req.user.id,
+            comment: req.body.comment,
+          },
+        },
+      },
+      include: {
+        bookComments: true,
+      },
+    });
+
+    response.status(200).json({
+      comments: book.bookComments,
+    });
+  } catch (error) {
+    next(error);
   }
 };

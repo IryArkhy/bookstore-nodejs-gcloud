@@ -12,6 +12,7 @@ import { orderHandlers, ordersValidators } from './handlers/orders';
 import { authorHandlers, authorsValidators } from './handlers/authors';
 import { genresHandlers, genresValidators } from './handlers/genres';
 import { userHandlers } from './handlers/users';
+import { processFileMiddleware } from './modules/images';
 
 const router = Router();
 
@@ -47,6 +48,18 @@ router.delete(
   handleInputErrors,
   checkUserRole,
   booksHandlers.deleteBook,
+);
+router.post(
+  '/upload/:id/:authorID',
+  processFileMiddleware,
+  checkUserRole,
+  booksHandlers.uploadBookImage,
+);
+router.post(
+  '/book/comment/:id/:authorID',
+  booksValidators.createComment,
+  handleInputErrors,
+  booksHandlers.createBookComment,
 );
 
 /**

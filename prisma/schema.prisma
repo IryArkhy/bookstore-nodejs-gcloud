@@ -19,13 +19,14 @@ model User {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
 
-  email    String  @unique
-  username String  @unique
-  password String
-  name     String?
-  surname  String?
-  orders   Order[]
-  role     ROLES   @default(BASIC)
+  email       String        @unique
+  username    String        @unique
+  password    String
+  name        String?
+  surname     String?
+  orders      Order[]
+  role        ROLES         @default(BASIC)
+  BookComment BookComment[]
 }
 
 model Author {
@@ -59,10 +60,13 @@ model Book {
   authorID    String
   author      Author        @relation(fields: [authorID], references: [id])
   description String
-  genres      GenreOnBook[] 
+  genres      GenreOnBook[]
   orderItems  OrderItem[]
   price       Int
   year        Int
+  bookAssest  BookAssest?
+  bookComments BookComment[]
+
   @@unique([id, authorID])
 }
 
@@ -98,4 +102,29 @@ model Order {
   totalPrice Int
 
   @@unique([id, userID])
+}
+
+model BookAssest {
+  id String @id @default(uuid())
+
+  bookID    String @unique
+  book      Book   @relation(fields: [bookID], references: [id])
+  assetID   String
+  publicID  String
+  width     Int
+  height    Int
+  url       String
+  secureUrl String
+
+  @@unique([id, bookID])
+}
+
+model BookComment {
+  id String @id @default(uuid())
+
+  bookID  String
+  book    Book   @relation(fields: [bookID], references: [id])
+  userID  String
+  user    User   @relation(fields: [userID], references: [id])
+  comment String
 }

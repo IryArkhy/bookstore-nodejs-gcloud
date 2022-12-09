@@ -9,6 +9,9 @@ steps:
       - 'DATABASE_URL=${_DATABASE_URL}'
       - 'JWT_SECRET=${_JWT_SECRET}'
       - 'STAGE=${_STAGE}'
+      - 'CLOUDINARY_CLOUD_NAME=${_CLOUDINARY_CLOUD_NAME}'
+      - 'CLOUDINARY_API_KEY=${_CLOUDINARY_API_KEY}'
+      - 'CLOUDINARY_API_SECRET=${_CLOUDINARY_API_SECRET}'
   - name: 'node:16.5.0'
     id: Build the app
     entrypoint: npm

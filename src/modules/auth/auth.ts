@@ -69,7 +69,6 @@ export const protectMiddleware = async (
     next();
   } catch (e) {
     notifyNotAuthorized('Not valid token');
-    return;
   }
 };
 
