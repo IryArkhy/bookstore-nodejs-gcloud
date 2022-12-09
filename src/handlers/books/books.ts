@@ -8,20 +8,27 @@ import { CustomError, PrismaClientErrorCodes } from '../../types';
 import {
   CreateBookReqBody,
   DeleteBookReqBody,
-  GetBooksReqBody,
   GetBooksReqQuery,
   UpdateBookReqBody,
 } from './types';
 
 export const getBooks = async (
-  req: Request<any, any, GetBooksReqBody, GetBooksReqQuery>,
+  req: Request<any, any, any, GetBooksReqQuery>,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const { body, query } = req;
-    const { offset = undefined, limit = 20 } = body;
-    const { authorID, genre = '', year } = query;
+    const { query } = req;
+    const {
+      authorID,
+      genre = '',
+      year,
+      offset: queryOffset,
+      limit: queryLimit,
+    } = query;
+
+    const offset = queryOffset ? Number(queryOffset) : 0;
+    const limit = queryLimit ? Number(queryLimit) : 20;
 
     const parsedGenres = genre.replace('%', ' ').split(',');
     const shouldIncludeCondition = authorID || genre || year;
@@ -85,7 +92,7 @@ export const getBooks = async (
       books,
       count: count,
       limit,
-      offset: newOffset === count ? null : newOffset,
+      offset: newOffset > count ? null : newOffset,
     });
   } catch (error) {
     next(error);

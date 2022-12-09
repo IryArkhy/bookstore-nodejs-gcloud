@@ -8,5 +8,4 @@ module.exports = {
   proseWrap: 'always',
   arrowParens: 'avoid',
   bracketSpacing: true,
-  semi: true,
 };

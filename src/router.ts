@@ -24,12 +24,7 @@ router.get('/user', checkUserRole, userHandlers.getUsers);
 /**
  * Books
  */
-router.get(
-  '/book',
-  booksValidators.getBooks,
-  handleInputErrors,
-  booksHandlers.getBooks,
-);
+router.get('/book', handleInputErrors, booksHandlers.getBooks);
 router.get('/book/search', booksHandlers.searchBook);
 router.get('/book/:id/:authorID', booksHandlers.getBookByID);
 router.post(

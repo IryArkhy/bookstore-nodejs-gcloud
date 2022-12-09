@@ -8,12 +8,9 @@ export type CreateBookReqBody = {
   year: number;
 };
 
-export type GetBooksReqBody = {
-  offset?: number;
-  limit?: number;
-};
-
 export type GetBooksReqQuery = {
+  offset: string;
+  limit: string;
   authorID: string;
   genre: string;
   year: string;

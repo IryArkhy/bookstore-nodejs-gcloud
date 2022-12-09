@@ -8,11 +8,6 @@ export const createBook = [
   //   body('asset').optional().isString(),
 ];
 
-export const getBooks = [
-  body('offset').isInt().optional(),
-  body('limit').isInt().optional(),
-];
-
 export const updateBook = [
   body('authorID').isString(),
   body('price').isInt().optional(),
