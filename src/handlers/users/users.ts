@@ -1,5 +1,6 @@
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { NextFunction, Request, Response } from 'express';
+import { userHandlers } from '.';
 
 import { prisma } from '../../db';
 import {
@@ -124,6 +125,26 @@ export const getUsers = async (
       limit,
       offset: newOffset === count ? null : newOffset,
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getUser = async (
+  req: RequestWithUser,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const user = await prisma.user.findUniqueOrThrow({
+      where: {
+        id: req.user.id,
+      },
+    });
+
+    const { password, ...rest } = user;
+
+    res.status(200).json({ user: rest });
   } catch (error) {
     next(error);
   }

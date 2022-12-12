@@ -20,7 +20,8 @@ const router = Router();
  * Users
  */
 
-router.get('/user', checkUserRole, userHandlers.getUsers);
+router.get('/user', userHandlers.getUser);
+router.get('/users', checkUserRole, userHandlers.getUsers);
 
 /**
  * Books
