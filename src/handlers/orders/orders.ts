@@ -115,6 +115,9 @@ export const getUserOrders = async (
 ) => {
   try {
     const user = await prisma.user.findFirst({
+      orderBy: {
+        createdAt: 'desc',
+      },
       where: {
         id: req.user.id,
       },
@@ -150,7 +153,11 @@ export const getOrderByID = async (
       include: {
         items: {
           include: {
-            book: true,
+            book: {
+              include: {
+                author: true,
+              },
+            },
           },
         },
       },
