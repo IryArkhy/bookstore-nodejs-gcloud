@@ -152,6 +152,11 @@ export const getOrderByID = async (
       },
       include: {
         items: {
+          orderBy: {
+            book: {
+              title: 'asc',
+            },
+          },
           include: {
             book: {
               include: {
