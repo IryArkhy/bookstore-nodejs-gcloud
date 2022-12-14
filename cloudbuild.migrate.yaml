@@ -16,10 +16,8 @@ steps:
     id: Build the app
     entrypoint: npm
     args: ['run', 'build'],
-  - name: 'gcr.io/cloud-builders/npm'
+  - name: 'node:16.5.0'
     entrypoint: npx
-    env:
-      - 'DATABASE_URL=${_DATABASE_URL}'
     args:
       - 'prisma'
       - 'migrate'
