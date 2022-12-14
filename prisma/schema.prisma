@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,28 +7,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum ROLES {
-  BASIC
-  ADMIN
-}
-
 model User {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-
+  id          String        @id @default(uuid())
+  createdAt   DateTime      @default(now())
   email       String        @unique
   username    String        @unique
-  password    String
   name        String?
   surname     String?
-  orders      Order[]
+  password    String
   role        ROLES         @default(BASIC)
   BookComment BookComment[]
+  orders      Order[]
 }
 
 model Author {
-  id String @id @default(uuid())
-
+  id      String @id @default(uuid())
   name    String
   surname String
   books   Book[]
@@ -44,30 +34,86 @@ model Genre {
 }
 
 model GenreOnBook {
-  book       Book     @relation(fields: [bookID], references: [id])
-  bookID     String // relation scalar field (used in the `@relation` attribute above)
-  genre      Genre    @relation(fields: [genreID], references: [id])
-  genreID    String // relation scalar field (used in the `@relation` attribute above)
+  bookID     String
+  genreID    String
   assignedAt DateTime @default(now())
+  book       Book     @relation(fields: [bookID], references: [id])
+  genre      Genre    @relation(fields: [genreID], references: [id])
 
   @@id([bookID, genreID])
 }
 
 model Book {
-  id          String        @id @default(uuid())
-  title       String        @unique
-  asset       String? // url
-  authorID    String
-  author      Author        @relation(fields: [authorID], references: [id])
-  description String
-  genres      GenreOnBook[]
-  orderItems  OrderItem[]
-  price       Int
-  year        Int
-  bookAssest  BookAssest?
+  id           String        @id @default(uuid())
+  title        String        @unique
+  asset        String?
+  authorID     String
+  description  String
+  price        Int
+  year         Int
+  author       Author        @relation(fields: [authorID], references: [id])
+  bookAssest   BookAssest?
   bookComments BookComment[]
+  genres       GenreOnBook[]
+  orderItems   OrderItem[]
 
   @@unique([id, authorID])
+}
+
+model OrderItem {
+  id         String @id @default(uuid())
+  orderID    String
+  amount     Int
+  bookId     String
+  totalPrice Int
+  book       Book   @relation(fields: [bookId], references: [id])
+  order      Order  @relation(fields: [orderID], references: [id])
+
+  @@unique([id, orderID])
+}
+
+model Order {
+  id         String       @id @default(uuid())
+  createdAt  DateTime     @default(now())
+  userID     String
+  status     ORDER_STATUS @default(PROCESSING)
+  totalPrice Int
+  user       User         @relation(fields: [userID], references: [id])
+  items      OrderItem[]
+
+  @@unique([id, userID])
+}
+
+model BookAssest {
+  id        String @id @default(uuid())
+  bookID    String @unique
+  assetID   String
+  publicID  String
+  width     Int
+  height    Int
+  url       String
+  secureUrl String
+  book      Book   @relation(fields: [bookID], references: [id])
+
+  @@unique([id, bookID])
+}
+
+model BookComment {
+  id        String   @id @default(uuid())
+  bookID    String
+  userID    String
+  comment   String
+  createdAt DateTime @default(now())
+  rating    Int?
+  book      Book     @relation(fields: [bookID], references: [id])
+  user      User     @relation(fields: [userID], references: [id])
+
+  @@unique([id, bookID])
+}
+
+enum ROLES {
+  BASIC
+  ADMIN
 }
 
 enum ORDER_STATUS {
@@ -76,59 +122,4 @@ enum ORDER_STATUS {
   IN_PROGRESS
   CANCELED
   DONE
-}
-
-model OrderItem {
-  id String @id @default(uuid())
-
-  orderID    String
-  order      Order  @relation(fields: [orderID], references: [id])
-  amount     Int
-  book       Book   @relation(fields: [bookId], references: [id])
-  bookId     String
-  totalPrice Int
-
-  @@unique([id, orderID])
-}
-
-model Order {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-
-  userID     String
-  user       User         @relation(fields: [userID], references: [id])
-  status     ORDER_STATUS @default(PROCESSING)
-  items      OrderItem[]
-  totalPrice Int
-
-  @@unique([id, userID])
-}
-
-model BookAssest {
-  id String @id @default(uuid())
-
-  bookID    String @unique
-  book      Book   @relation(fields: [bookID], references: [id])
-  assetID   String
-  publicID  String
-  width     Int
-  height    Int
-  url       String
-  secureUrl String
-
-  @@unique([id, bookID])
-}
-
-model BookComment {
-  id String @id @default(uuid())
-  createdAt DateTime @default(now())
-
-  bookID  String
-  book    Book   @relation(fields: [bookID], references: [id])
-  userID  String
-  user    User   @relation(fields: [userID], references: [id])
-  comment String
-  rating Int?
-
-  @@unique([id, bookID])
 }
