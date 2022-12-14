@@ -15,9 +15,12 @@ steps:
   - name: 'node:16.5.0'
     id: Build the app
     entrypoint: npm
-    args: ['run', 'build'],
+    args: ['run', 'build']
   - name: 'node:16.5.0'
+    id: Migrate DB
     entrypoint: npx
+    env:
+      - 'DATABASE_URL=${_DATABASE_URL}'
     args:
       - 'prisma'
       - 'migrate'
