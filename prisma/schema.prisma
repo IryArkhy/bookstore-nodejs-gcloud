@@ -121,6 +121,7 @@ model BookAssest {
 
 model BookComment {
   id String @id @default(uuid())
+  createdAt DateTime @default(now())
 
   bookID  String
   book    Book   @relation(fields: [bookID], references: [id])
