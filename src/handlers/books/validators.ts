@@ -13,6 +13,9 @@ export const updateBook = [
   body('title').isString().optional(),
   body('description').isString().optional(),
 ];
-export const createComment = body('comment').isString().isLength({ min: 1 });
+export const createComment = [
+  body('comment').isString().isLength({ min: 1 }),
+  body('rating').isInt({ min: 1, max: 5 }),
+];
 
 export const deleteBook = body('authorID').isString();

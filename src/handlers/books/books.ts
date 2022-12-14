@@ -126,6 +126,9 @@ export const getBookByID = async (
           },
         },
         bookComments: {
+          orderBy: {
+            createdAt: 'desc',
+          },
           include: {
             user: {
               select: {
@@ -455,11 +458,16 @@ export const createBookComment = async (
           create: {
             userID: req.user.id,
             comment: req.body.comment,
+            rating: req.body.rating,
           },
         },
       },
       include: {
-        bookComments: true,
+        bookComments: {
+          orderBy: {
+            createdAt: 'desc',
+          },
+        },
       },
     });
 

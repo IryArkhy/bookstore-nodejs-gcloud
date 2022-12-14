@@ -29,4 +29,5 @@ export type DeleteBookReqBody = {
 
 export type CreateCommentReqBody = {
   comment: string;
+  rating: number; // from 1 to 5
 };
