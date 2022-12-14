@@ -63,6 +63,7 @@ export const getBooks = async (
         id: true,
         title: true,
         price: true,
+        bookAssest: true,
         author: {
           select: {
             name: true,
@@ -192,6 +193,7 @@ export const searchBook = async (
         id: true,
         title: true,
         price: true,
+        bookAssest: true,
         author: {
           select: {
             name: true,
