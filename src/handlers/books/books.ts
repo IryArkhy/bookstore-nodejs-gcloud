@@ -126,11 +126,7 @@ export const getBookByID = async (
           },
         },
         bookComments: {
-          select: {
-            comment: true,
-            createdAt: true,
-            id: true,
-            rating: true,
+          include: {
             user: {
               select: {
                 username: true,
