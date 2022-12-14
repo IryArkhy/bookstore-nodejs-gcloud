@@ -118,7 +118,18 @@ export const getBookByID = async (
         },
       },
       include: {
+        author: true,
         genres: true,
+        bookComments: {
+          include: {
+            user: {
+              select: {
+                username: true,
+                id: true,
+              },
+            },
+          },
+        },
       },
     });
 
