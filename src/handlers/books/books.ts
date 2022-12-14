@@ -467,6 +467,14 @@ export const createBookComment = async (
           orderBy: {
             createdAt: 'desc',
           },
+          include: {
+            user: {
+              select: {
+                username: true,
+                id: true,
+              },
+            },
+          },
         },
       },
     });
