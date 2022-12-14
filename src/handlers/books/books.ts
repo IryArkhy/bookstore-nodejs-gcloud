@@ -59,13 +59,17 @@ export const getBooks = async (
             year: year ? parseInt(year) : undefined,
           }
         : undefined,
-      include: {
-        genres: {
-          include: {
-            genre: true,
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        author: {
+          select: {
+            name: true,
+            surname: true,
+            id: true,
           },
         },
-        author: true,
       },
     });
 
@@ -183,6 +187,18 @@ export const searchBook = async (
             },
           },
         ],
+      },
+      select: {
+        id: true,
+        title: true,
+        price: true,
+        author: {
+          select: {
+            name: true,
+            surname: true,
+            id: true,
+          },
+        },
       },
     });
 
