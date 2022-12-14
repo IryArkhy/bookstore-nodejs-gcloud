@@ -15,7 +15,7 @@ steps:
   - name: 'node:16.5.0'
     id: Build the app
     entrypoint: npm
-    args: ['run', 'build'],
+    args: ['run', 'build']
   - name: 'gcr.io/cloud-builders/gcloud'
     id: Deploy the app
     args: ['app', 'deploy']
