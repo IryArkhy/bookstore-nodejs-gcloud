@@ -119,7 +119,11 @@ export const getBookByID = async (
       },
       include: {
         author: true,
-        genres: true,
+        genres: {
+          select: {
+            genre: true,
+          },
+        },
         bookComments: {
           include: {
             user: {
