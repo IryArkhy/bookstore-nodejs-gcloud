@@ -65,11 +65,12 @@ export const catchError = (
 
 export const errorLogger = (
   error: Error | CustomError,
-  _: Request,
+  req: Request,
   __: Response,
   next: NextFunction,
 ) => {
   console.log({ ERROR_logger: error });
+  console.log({ body: JSON.stringify(req.body) });
   next(error);
 };
 
