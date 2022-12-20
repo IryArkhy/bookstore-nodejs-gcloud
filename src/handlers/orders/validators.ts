@@ -1,16 +1,14 @@
-import { body } from 'express-validator';
+import { body, check } from 'express-validator';
 
-export const createOrder = [
-  body('orderItems').custom(input => {
-    if (!Array.isArray(input)) {
-      return Promise.reject('Invalid input type. Should be an array.');
-    }
+export const createOrder = check('orderItems')
+  .isArray()
+  .withMessage('`orderItems` is not an array')
+  .isLength({ min: 1 })
+  .withMessage('At least one order item')
+  .custom(value => {
+    const orderItems = value as unknown[];
 
-    if (input.length === 0) {
-      return Promise.reject('At least one order item');
-    }
-
-    const validInputItems = input.every(item => {
+    return orderItems.every(item => {
       const orderItemKeys = ['bookID', 'amount', 'authorID'];
       const validKeys = Object.keys(item).every(key =>
         orderItemKeys.includes(key),
@@ -29,14 +27,8 @@ export const createOrder = [
 
       return validKeys && validAmount && validBookID && validAuthorID;
     });
-
-    if (!validInputItems) {
-      return Promise.reject('Invalid order item(s)');
-    }
-
-    return true;
-  }),
-];
+  })
+  .withMessage('Order item is invalid');
 
 export const updateOrder = [
   body('status').isIn([

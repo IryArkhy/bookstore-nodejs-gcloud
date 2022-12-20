@@ -224,6 +224,11 @@ export const searchBook = async (
               mode: 'insensitive',
             },
           },
+          {
+            author: {
+              name: parsedQuery,
+            },
+          },
         ],
       },
     });
