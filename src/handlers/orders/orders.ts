@@ -114,24 +114,20 @@ export const getUserOrders = async (
   next: NextFunction,
 ) => {
   try {
-    const user = await prisma.user.findFirst({
+    const orders = await prisma.order.findMany({
       orderBy: {
         createdAt: 'desc',
       },
       where: {
-        id: req.user.id,
+        userID: req.user.id,
       },
       include: {
-        orders: {
-          include: {
-            items: true,
-          },
-        },
+        items: true,
       },
     });
 
     res.status(200);
-    res.json({ orders: user.orders });
+    res.json({ orders });
   } catch (error) {
     next(error);
   }

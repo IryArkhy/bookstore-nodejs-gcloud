@@ -44,19 +44,23 @@ export const getBooks = async (
       },
       where: shouldIncludeCondition
         ? {
-            authorID,
-            genres: {
-              some: parsedGenres.length
-                ? {
-                    genre: {
-                      name: {
-                        in: parsedGenres,
+            AND: [
+              { authorID },
+              { year: year ? parseInt(year) : undefined },
+              {
+                genres: parsedGenres.length
+                  ? {
+                      some: {
+                        genre: {
+                          name: {
+                            in: parsedGenres,
+                          },
+                        },
                       },
-                    },
-                  }
-                : undefined,
-            },
-            year: year ? parseInt(year) : undefined,
+                    }
+                  : undefined,
+              },
+            ],
           }
         : undefined,
       select: {
@@ -77,19 +81,23 @@ export const getBooks = async (
     const count = await prisma.book.count({
       where: shouldIncludeCondition
         ? {
-            authorID,
-            genres: {
-              some: parsedGenres.length
-                ? {
-                    genre: {
-                      name: {
-                        in: parsedGenres,
+            AND: [
+              { authorID },
+              { year: year ? parseInt(year) : undefined },
+              {
+                genres: parsedGenres.length
+                  ? {
+                      some: {
+                        genre: {
+                          name: {
+                            in: parsedGenres,
+                          },
+                        },
                       },
-                    },
-                  }
-                : undefined,
-            },
-            year: year ? parseInt(year) : undefined,
+                    }
+                  : undefined,
+              },
+            ],
           }
         : undefined,
     });
