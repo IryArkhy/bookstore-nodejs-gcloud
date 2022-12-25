@@ -34,7 +34,32 @@ export const getBooks = async (
     const limit = queryLimit ? Number(queryLimit) : 20;
 
     const parsedGenres = genre.replace('%', ' ').split(',');
-    const shouldIncludeCondition = authorID || genre || year;
+
+    const filters = [];
+
+    if (authorID) {
+      filters.push({ authorID });
+    }
+
+    if (parsedGenres.length) {
+      filters.push({
+        genres: {
+          some: {
+            genre: {
+              name: {
+                in: parsedGenres,
+              },
+            },
+          },
+        },
+      });
+    }
+
+    if (year) {
+      filters.push({
+        year: parseInt(year),
+      });
+    }
 
     const books = await prisma.book.findMany({
       skip: offset,
@@ -42,25 +67,9 @@ export const getBooks = async (
       orderBy: {
         title: 'asc',
       },
-      where: shouldIncludeCondition
+      where: filters.length
         ? {
-            AND: [
-              { authorID },
-              { year: year ? parseInt(year) : undefined },
-              {
-                genres: parsedGenres.length
-                  ? {
-                      some: {
-                        genre: {
-                          name: {
-                            in: parsedGenres,
-                          },
-                        },
-                      },
-                    }
-                  : undefined,
-              },
-            ],
+            OR: filters,
           }
         : undefined,
       select: {
@@ -79,25 +88,9 @@ export const getBooks = async (
     });
 
     const count = await prisma.book.count({
-      where: shouldIncludeCondition
+      where: filters.length
         ? {
-            AND: [
-              { authorID },
-              { year: year ? parseInt(year) : undefined },
-              {
-                genres: parsedGenres.length
-                  ? {
-                      some: {
-                        genre: {
-                          name: {
-                            in: parsedGenres,
-                          },
-                        },
-                      },
-                    }
-                  : undefined,
-              },
-            ],
+            OR: filters,
           }
         : undefined,
     });
