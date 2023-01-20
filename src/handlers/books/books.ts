@@ -30,10 +30,15 @@ export const getBooks = async (
       limit: queryLimit,
     } = query;
 
+    console.log({ query });
+
     const offset = queryOffset ? Number(queryOffset) : 0;
     const limit = queryLimit ? Number(queryLimit) : 20;
 
-    const parsedGenres = genre.replace('%', ' ').split(',');
+    const parsedGenres = genre
+      .replace('%', ' ')
+      .split(',')
+      .filter(g => g);
 
     const filters = [];
 
@@ -67,11 +72,7 @@ export const getBooks = async (
       orderBy: {
         title: 'asc',
       },
-      where: filters.length
-        ? {
-            OR: filters,
-          }
-        : undefined,
+      ...(filters.length ? { where: { OR: filters } } : {}),
       select: {
         id: true,
         title: true,
@@ -87,13 +88,15 @@ export const getBooks = async (
       },
     });
 
-    const count = await prisma.book.count({
-      where: filters.length
+    const count = await prisma.book.count(
+      filters.length
         ? {
-            OR: filters,
+            where: {
+              OR: filters,
+            },
           }
         : undefined,
-    });
+    );
     res.status(200);
     const newOffset = offset + limit;
 
